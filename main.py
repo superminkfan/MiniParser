@@ -1,16 +1,28 @@
-# This is a sample Python script.
+# main.py
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from utils import read_log_file
+from log_parser import parse_log_lines
+from data_processing import clean_data
+from plotter import plot_metrics
 
+def main():
+    # Здесь можно задать путь к файлу логов
+    log_file = "ignite_short.log"
+    lines = read_log_file(log_file)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+    # Парсим лог
+    raw_records = parse_log_lines(lines)
+    # print('Raw records = ')
+    # print(raw_records)
+    # Очищаем и нормализуем данные
+    cleaned_records = clean_data(raw_records)
 
+    # Если хотим построить графики
+    if cleaned_records:
+        plot_metrics(cleaned_records)
+        print("Plots have been saved successfully.")
+    else:
+        print("No data found to plot.")
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    main()
